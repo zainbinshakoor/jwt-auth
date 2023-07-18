@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-
-
-
 const doctorSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -14,11 +11,11 @@ const doctorSchema = new mongoose.Schema({
     token:{
         type:String,
         required:false
+    },
+    resetToken:{
+        type:String,
+        required:false
     }
 })
-
-
 const users = mongoose.model('users', doctorSchema);
-
-
 module.exports = users  
