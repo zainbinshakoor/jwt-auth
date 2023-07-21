@@ -15,6 +15,10 @@ const doctorSchema = new mongoose.Schema({
     resetToken:{
         type:String,
         required:false
+    },
+    role:{
+        type:String,
+        required:true
     }
 })
 const users = mongoose.model('users', doctorSchema);

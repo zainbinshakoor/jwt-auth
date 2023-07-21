@@ -13,7 +13,7 @@ const signup = router.post("/signup", async (req, res) => {
     } else {
       // Hash the password using bcrypt
       const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new UserModel({ name, password: hashedPassword });
+      const newUser = new UserModel({ role: "candidate", name, password: hashedPassword });
       await newUser.save();
       res.status(200).json(newUser);
     }
