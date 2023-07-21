@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const sendEmail = require('../helperFunction/email')
-
 const UserModel = require("../schema/user");
+const {emailTemplate} = require('../emailTemplate/compileEngine')
 
 const JWT_SECRET_KEY = process.env.SECRET_KEY;
 const forgotpassword = router.post("/forgotpassword", async (req, res) => {
@@ -28,7 +28,18 @@ const forgotpassword = router.post("/forgotpassword", async (req, res) => {
     const emailSubject = "Password Reset Request";
     const emailText = `Click the link to reset your password: ${resetPasswordURL}`;
 
-    await sendEmail(user.name, emailSubject, emailText);
+    await sendEmail(user.name, emailSubject, emailTemplate.compiledEmail({ResetURL:resetPasswordURL}),(err, data) => {
+      if (err) {
+          console.log('Error sending email: ', err)
+          return res
+              .status(500)
+              .json({ message: 'Failed to send email' })
+      } else {
+          return res
+              .status(200)
+              .json({ message: 'Email sent successfully', data })
+      }
+  });
 
     res.status(200).json("Reset token generated and emailed successfully");
   } catch (error) {
